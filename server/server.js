@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express');
 const app = express();
 const axios = require('axios');
-const key = 'AIzaSyC0VaGsv4vdS6aBw7otqrikEI4ykWbQRbE';
 const cors = require('cors');
 const mongoose = require('mongoose');
 const mongoURI = process.env.MONGO_URI
