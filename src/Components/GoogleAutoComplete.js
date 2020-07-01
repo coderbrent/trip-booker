@@ -5,7 +5,7 @@ import { addTrip, removeTrip } from '../store/trips';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const GoogleAutoComplete = ({ type }) => {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState('');
   const [id, setId] = useState('');
   const dispatch = useDispatch();
   

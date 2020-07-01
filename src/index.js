@@ -9,13 +9,13 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { faCheckSquare, faCoffee, faCar } from '@fortawesome/free-solid-svg-icons'
 import { Auth0Provider } from '@auth0/auth0-react';
-import { addTrip, loadTrips } from './store/trips';
+import { addTrip, getDirections } from './store/trips';
 
 const rootElement = document.getElementById('root')
 library.add(fab, faCheckSquare, faCoffee, faCar, fas)
 const store = configureStore();
 
-store.dispatch(loadTrips())
+store.dispatch(getDirections('54 Tracy Drive Manalapan NJ 07726', 'Madison Square Garden'))
 
 ReactDOM.render(
   <Provider store={store}>

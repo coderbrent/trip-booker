@@ -7,6 +7,7 @@ const trips = {
   lastFetch: null,
   origins: [],
   destinations: [],
+  routingData: [],
 }
 
 const slice = createSlice({
@@ -55,15 +56,16 @@ const slice = createSlice({
       trips.loading = false;
     },
     directionsResponseReceived: (trips, action) => {
-      const { response } = action.payload;
-      const resObj = Object.assign({}, response);
-      trips.response = resObj;
+      const { routes } = action.payload;
+      const resObj = Object.assign({}, routes);
+      trips.routingData.push(resObj);
     },
   }
 });
 
-const url = '/trips';
+const url = '/trips'; //sloppy
 
+//api action creators
 export const loadTrips = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.trips;
   const diffInMinutes = moment().diff(moment(lastFetch), 'minutes');
@@ -85,6 +87,14 @@ export const addTrip = trip => apiCallBegan({
   method: 'post',
   data: trip,
   onSuccess: tripAdded.type
+});
+
+export const getDirections = (origin, destination) => apiCallBegan({
+  url: `/get-directions`,
+  headers: { "Content-Type": "application/json" },
+  method: 'get',
+  data: { origin, destination },
+  onSuccess: directionsResponseReceived.type
 })
   
 export const { 
@@ -96,4 +106,5 @@ export const {
   removeTrip,
   directionsResponseReceived,
 } = slice.actions;
+
 export default slice.reducer;

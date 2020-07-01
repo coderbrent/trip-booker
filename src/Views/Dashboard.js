@@ -50,8 +50,7 @@ const Dashboard = () => {
     }}>
       <GoogleMap />
         <form>
-          <h1 className="title-is-1">Trip Maker</h1>
-            <p className="is-light">Where you from? Type in your address and then fill out a message </p>
+          <p className="is-light">Enter an origin and a destination and click submit to save a trip to your profile.</p>
           <div style={{ margin: '.9rem 0rem'}}>
           </div>
           <div style={{ margin: `1rem 0rem`}}>

@@ -2,22 +2,24 @@ import React, { useState, useEffect } from 'react'
 import GoogleMapReact from 'google-map-react'
 import { useSelector } from 'react-redux'
 import MapMarker from './MapMarker';
+import { directionsResponseReceived } from '../store/trips';
 
 const GoogleMap = props => {
   const [localMap, setMap] = useState();
-  const origins = useSelector(state => state.entities.trips.origins)
-  const destinations = useSelector(state => state.entities.trips.destinations)
+  const origins = useSelector(state => state.entities.trips.origins);
+  const destinations = useSelector(state => state.entities.trips.destinations);
  
   return (
     <div style={{ height: '15rem', width: '100%' }}>
     <GoogleMapReact
-      bootstrapURLKeys={{ key: 'AIzaSyC0VaGsv4vdS6aBw7otqrikEI4ykWbQRbE' }}
+      bootstrapURLKeys={{ key: process.env.GOOGLE_API_KEY }}
       defaultCenter={{ lat: 40.310134, lng: -74.27660709999999 }}
       defaultZoom={8}
       yesIWantToUseGoogleMapApiInternals
       onGoogleApiLoaded={({map, maps}) => {
+        directionsResponseReceived()
         setMap(map);
-        console.log(localMap)
+        
       }}
     >
       { 

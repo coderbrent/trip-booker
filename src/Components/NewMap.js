@@ -34,7 +34,7 @@ function NewMap() {
 
   return (
     <LoadScript
-      googleMapsApiKey="AIzaSyDbnIg8wB7mATLm6NCPqXiYEiCR1ucyEmI"
+      googleMapsApiKey={process.env.GOOGLE_API_KEY}
     >
       <GoogleMap
         mapContainerStyle={containerStyle}

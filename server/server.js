@@ -44,12 +44,25 @@ app.get(`/api/trips`, (req, res) => {
 
 });
 
+app.get(`/api/get-directions`, async (req, res) => {
+  console.log(req.body)
+  const { origin, destination } = req.body;
+
+  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${process.env.GOOGLE_API_KEY}`;
+
+  const response = 
+  await axios.get(url)
+  .then(response => response)
+  console.log(response.data)
+  res.json(response.data);
+})
+
 app.post(`/api/trips`, (req, res) => {
   const { id, tripType, name, coords } = req.body;
   
   const newTrip = new Trip({
     id, 
-    tripType, 
+    tripType,
     name, 
     coords: { 
       lat: coords.lat, 
