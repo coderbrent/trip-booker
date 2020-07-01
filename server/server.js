@@ -1,16 +1,16 @@
+require('dotenv').config()
 const express = require('express');
 const app = express();
 const axios = require('axios');
 const key = 'AIzaSyC0VaGsv4vdS6aBw7otqrikEI4ykWbQRbE';
 const cors = require('cors');
 const mongoose = require('mongoose');
+const mongoURI = process.env.MONGO_URI
 
 app.use(express.json());
 app.use(cors());
 
-const mongoURI = 'mongodb+srv://brent:Zsw0wers%21@cluster0-bfb3g.mongodb.net/trips?retryWrites=true&w=majority'
-
-mongoose.connect(mongoURI, 
+mongoose.connect(mongoURI,
   { useNewUrlParser: true, useUnifiedTopology: true }
 )
 
