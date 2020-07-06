@@ -30,7 +30,8 @@ const GoogleAutoComplete = ({ type }) => {
         }
       })
     )
-    setId(results[0].place_id)    
+
+    setId(results[0].place_id)
   };
 
   const clearField = event => {
@@ -49,6 +50,7 @@ const GoogleAutoComplete = ({ type }) => {
       onChange={setAddress}
       onSelect={handleSelect}
       searchOptions={searchOptions}
+      googleCallbackName={ type === 'origins' ? "initOne" : "initTwo" }
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
       <div className="field">

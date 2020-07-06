@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import GoogleMap from '../Components/GoogleMap';
 import GoogleAutoComplete from '../Components/GoogleAutoComplete';
-import { userAdded, userRemoved } from '../store/users';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -19,25 +18,7 @@ const Dashboard = () => {
       console.warn('this browser does not support geolocation - user location unavailable')
     }
   }, []);
-
-  const addUsers = () => {
-    dispatch(
-      userAdded({ 
-        id: 1, 
-        firstname: 'brent', 
-        lastname: 'abruzese', 
-        email: 'brent.abruzese@gmail.com',
-        avatar: 'https://www.pictureofsomething.com/jpg',
-      }
-    ))
-  };
-
-  const removeUsers = () => {
-    dispatch(
-      userRemoved({ id: 1 })
-    )
-  };
-  
+    
   return (
   <>
     <div style={{
@@ -60,8 +41,6 @@ const Dashboard = () => {
           </div>
         </form>
     </div>
-    <button onClick={addUsers}>add user</button>
-    <button onClick={removeUsers}>delete user</button>
   </>
   )
 }

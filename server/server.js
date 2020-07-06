@@ -1,76 +1,64 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const axios = require('axios');
 const cors = require('cors');
-const mongoose = require('mongoose');
-const mongoURI = process.env.MONGO_URI
+const admin = require('firebase-admin');
+const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect(mongoURI,
-  { useNewUrlParser: true, useUnifiedTopology: true }
-)
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error: '));
-db.once('open', () => console.log('connection to DB is open'))
-
-const tripSchema = new mongoose.Schema({
-  id: String,
-  tripType: String,
-  name: String,
-  coords: {
-    lat: Number,
-    lng: Number,
-  }
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://routing-assets-1576700044438.firebaseio.com"
 });
 
-const Trip = mongoose.model('Trip', tripSchema);
+const fireDb = admin.database();
+const ref = fireDb.ref("restricted_access/secret_document");
 
-app.get(`/api/trips`, (req, res) => {
-  const trips = {
-    id: 943,
-    tripType: 'origins',
-    name: 'Brent',
-    lat: 39.8483,
-    lng: -74.4939
-  }
+app.post('/api/add-vehicles', (req, res) => {
+  const { id, make, model, year } = req.body;
 
-  res.json(trips);
+  const vehiclesRef = ref.child('vehicles');
 
-  // newTrip.save()
-
+  vehiclesRef.set({
+    id,
+    make,
+    model,
+    year,
+  }, error => {
+    if(error) { return res.json('data could not be saved.' + error) }
+  });
+  
 });
 
-app.get(`/api/get-directions`, async (req, res) => {
-  console.log(req.body)
-  const { origin, destination } = req.body;
+app.get('/api/vehicles/get-active-vehicles', (req, res) => {
+  const vehiclesRef = ref.child('vehicles');
 
-  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${process.env.GOOGLE_API_KEY}`;
+  vehiclesRef.on('child_added', (snapshot, prevChildKey) => {
+    console.log(snapshot.val())
+  })
 
-  const response = 
-  await axios.get(url)
-  .then(response => response)
-  console.log(response.data)
-  res.json(response.data);
 })
 
-app.post(`/api/trips`, (req, res) => {
-  const { id, tripType, name, coords } = req.body;
+app.post(`/api/trips/add-trips`, (req, res) => {
+  const { tripType, id, name, coords } = req.body;
+  const tripsRef = ref.child(tripType === 'origins' ? 'origins': 'destinations');
+
+    tripsRef.set({
+      tripType,
+      id,
+      name,
+      coords,
+    }, error => {
+      if(error) { 
+        return res.json('data could not be saved.' + error) 
+      } else {
+        return res.json({ tripType, id, name, coords })
+      }
+    });
   
-  const newTrip = new Trip({
-    id, 
-    tripType,
-    name, 
-    coords: { 
-      lat: coords.lat, 
-      lng: coords.lng 
-    }
-  })
-  
-  res.json(newTrip);
 });
 
 app.listen(5000, () => console.log('server is listening on port 5000'));

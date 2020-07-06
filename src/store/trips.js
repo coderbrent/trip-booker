@@ -4,10 +4,12 @@ import moment from 'moment';
 
 const trips = {
   loading: false,
-  lastFetch: null,
-  origins: [],
-  destinations: [],
-  routingData: [],
+  lastFetch: null, //timestamp to flag last data pull for caching
+  priority: '', //past, current(asap), upcoming
+  clientId: '',
+  origins: [], //id, tripType, address, lat (coords), lng (coords)
+  destinations: [], //id, tripType, address, lat (coords), lng (coords)
+  routingData: [], //stored to pass to directionsService method later
 }
 
 const slice = createSlice({
@@ -15,13 +17,19 @@ const slice = createSlice({
   initialState: trips,
   reducers: {
     tripAdded: (trips, action) => {
-      const { id, tripType, name, coords } = action.payload;
+      const { 
+        id, 
+        tripType, 
+        name, 
+        coords 
+      } = action.payload; // rename 'name' to address
+
       if(trips[tripType].length < 1) {
         trips[tripType].push({ 
           id, 
           tripType,
           name, 
-          lat: coords.lat, 
+          lat: coords.lat,
           lng: coords.lng 
         })
       } else {
@@ -39,7 +47,11 @@ const slice = createSlice({
       }
     },
     tripAssignedToUser: (trips, action) => {
-      const { tripId, tripType, userId } = action.payload;
+      const { 
+        tripId, 
+        tripType, 
+        userId 
+      } = action.payload;
       const index = trips[tripType].findIndex(trip => trip.id === tripId);
       trips[index].userId = userId;
     },
@@ -60,12 +72,18 @@ const slice = createSlice({
       const resObj = Object.assign({}, routes);
       trips.routingData.push(resObj);
     },
+    routingDataReceived: (trips, action) => {
+      const result = JSON.parse(action.payload)
+      trips.routingData.push(result);
+    },
+    routingDataCleared: (trips, action) => {
+      trips.routingData.pop();
+    }
   }
 });
 
-const url = '/trips'; //sloppy
+const url = '/trips';
 
-//api action creators
 export const loadTrips = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.trips;
   const diffInMinutes = moment().diff(moment(lastFetch), 'minutes');
@@ -83,19 +101,11 @@ export const loadTrips = () => (dispatch, getState) => {
 };
 
 export const addTrip = trip => apiCallBegan({
-  url,
+  url: '/trips/add-trips',
   method: 'post',
   data: trip,
   onSuccess: tripAdded.type
 });
-
-export const getDirections = (origin, destination) => apiCallBegan({
-  url: `/get-directions`,
-  headers: { "Content-Type": "application/json" },
-  method: 'get',
-  data: { origin, destination },
-  onSuccess: directionsResponseReceived.type
-})
   
 export const { 
   tripsRequested,
@@ -105,6 +115,8 @@ export const {
   tripAssignedToUser,
   removeTrip,
   directionsResponseReceived,
+  routingDataReceived,
+  routingDataCleared,
 } = slice.actions;
 
 export default slice.reducer;
