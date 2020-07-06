@@ -3,4 +3,5 @@ node_modules
 .env
 /server/.env
 /server/node_modules
-/creds
+/server/creds/*
+/server/creds/
