@@ -30,7 +30,6 @@ const GoogleAutoComplete = ({ type }) => {
         }
       })
     )
-
     setId(results[0].place_id)
   };
 
@@ -41,7 +40,7 @@ const GoogleAutoComplete = ({ type }) => {
       removeTrip({ tripType: type, id })
     )
     setAddress('')
-  }
+  };
     
   return (
     <>
@@ -50,7 +49,6 @@ const GoogleAutoComplete = ({ type }) => {
       onChange={setAddress}
       onSelect={handleSelect}
       searchOptions={searchOptions}
-      googleCallbackName={ type === 'origins' ? "initOne" : "initTwo" }
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
       <div className="field">

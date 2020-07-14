@@ -10,6 +10,6 @@ export default function() {
       ...getDefaultMiddleware(),
       toastify,
       api,
-    ]
+    ],
   })
 }

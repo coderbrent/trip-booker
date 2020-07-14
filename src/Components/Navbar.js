@@ -59,18 +59,18 @@ const Navbar = () => {
         </div>
       </div>
   
-      <div className="navbar-end">
-        <div className="navbar-item">
-          <div style={{ display: 'flex' }}>{ isAuthenticated ? <UserAvatar user={user} /> : null }</div>
-        </div>
-        <div className="navbar-item">
-          <div className="buttons">
-            <LoginButton />
+        <div className="navbar-end">
+          <div className="navbar-item">
+            <div style={{ display: 'flex' }}>{ isAuthenticated ? <UserAvatar user={user} /> : null }</div>
+          </div>
+          <div className="navbar-item">
+            <div className="buttons">
+              <LoginButton />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
   )
 }
 

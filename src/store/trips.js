@@ -78,7 +78,7 @@ const slice = createSlice({
     },
     routingDataCleared: (trips, action) => {
       trips.routingData.pop();
-    }
+    },
   }
 });
 
