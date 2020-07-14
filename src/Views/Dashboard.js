@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import GoogleMap from '../Components/GoogleMap';
 import GoogleAutoComplete from '../Components/GoogleAutoComplete';
@@ -6,18 +6,6 @@ import GoogleAutoComplete from '../Components/GoogleAutoComplete';
 const Dashboard = () => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
-
-  useEffect(() => {
-    if('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition((success, error) => {
-        if(error) console.log(error)
-        let lat = success.coords.latitude
-        let lng = success.coords.longitude
-      })
-    } else {
-      console.warn('this browser does not support geolocation - user location unavailable')
-    }
-  }, []);
     
   return (
   <>

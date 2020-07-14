@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 app.post('/api/vehicles/add-vehicles', (req, res) => {
-
+  
 });
 
 app.get('/api/vehicles/get-active-vehicles', (req, res) => {
